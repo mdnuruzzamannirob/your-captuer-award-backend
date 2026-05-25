@@ -465,7 +465,7 @@ model Team {
   lost                Int                 @default(0)
   draw                Int                 @default(0)
   badge               String              @default("https://www.freepik.com/free-photo/businesspeople-having-good-time-meeting_861800.htm#fromView=keyword&page=1&position=6&uuid=59ca936a-5c54-464c-a5ed-b579a1cd4afe&query=Team") //Image file
-  min_requirement     Int                 @default(0)
+  min_requirement     String?
   min_requirement_str String              @default("No minimum requirement")
   active_match_id     String?             @db.ObjectId
   leaderboard_rank    Int?
@@ -493,8 +493,8 @@ model TeamMatch {
   team1Id   String  @db.ObjectId
   team2Id   String  @db.ObjectId
   contest   Contest @relation(references: [id], fields: [contestId])
-  team1     Team    @relation(name: "team1", references: [id], fields: [team1Id])
-  team2     Team    @relation(name: "team2", references: [id], fields: [team2Id])
+  team1     Team    @relation(name: "team1", references: [id], fields: [team1Id], onDelete: NoAction)
+  team2     Team    @relation(name: "team2", references: [id], fields: [team2Id], onDelete: NoAction)
 
   // NEW: Scoring and Result Fields
   team1_score Int         @default(0)
@@ -518,7 +518,7 @@ model TeamMember {
 
   teamId             String               @db.ObjectId
   memberId           String               @unique @db.ObjectId
-  team               Team                 @relation(fields: [teamId], references: [id])
+  team               Team                 @relation(fields: [teamId], references: [id], onDelete: Cascade)
   member             User                 @relation(fields: [memberId], references: [id])
   contestParticipant ContestParticipant[]
 
